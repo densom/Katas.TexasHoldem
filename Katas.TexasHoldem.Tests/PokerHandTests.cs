@@ -120,7 +120,7 @@ namespace Katas.TexasHoldem.Tests
         {
             var hand = new PokerHand(handString);
 
-            HandResult result = hand.EvaluateForPair();
+            HandResult result = hand.EvaluateOfAKind(2);
 
             Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
             Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
@@ -134,7 +134,7 @@ namespace Katas.TexasHoldem.Tests
         {
             var hand = new PokerHand(handString);
 
-            HandResult result = hand.EvaluateForPair();
+            HandResult result = hand.EvaluateOfAKind(2);
 
             Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
             Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
@@ -149,10 +149,25 @@ namespace Katas.TexasHoldem.Tests
         {
             var hand = new PokerHand(handString);
 
-            HandResult result = hand.EvaluateForThreeOfAKind();
+            HandResult result = hand.EvaluateOfAKind(3);
 
             Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
             Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
         }
+
+        [Test]
+        [TestCase("2s 2c 3h 3s 4s", false, 0)]
+        [TestCase("2s 2c 2h 2d 5s", true, 1)]
+        [TestCase("2s 2c 2h 2d 5s 6s 7s", true, 1)]
+        public void EvaluateForPair_DetectsFourOfAKind(string handString, bool isPairFound, int expectedPairsDiscovered)
+        {
+            var hand = new PokerHand(handString);
+
+            HandResult result = hand.EvaluateOfAKind(4);
+
+            Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
+        }
+
     }
 }

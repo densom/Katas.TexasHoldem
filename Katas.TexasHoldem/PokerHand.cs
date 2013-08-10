@@ -98,12 +98,8 @@ namespace Katas.TexasHoldem
             return highCard.Value - lowCard.Value != 1;
         }
 
-        public HandResult EvaluateForPair()
-        {
-            return EvaluateForMatchingCards(2);
-        }
 
-        private HandResult EvaluateForMatchingCards(int numberOfCardsToMatch)
+        public HandResult EvaluateOfAKind(int numberOfCardsToMatch)
         {
             var results = new HandResult();
 
@@ -118,9 +114,6 @@ namespace Katas.TexasHoldem
             return results;
         }
 
-        public HandResult EvaluateForThreeOfAKind()
-        {
-            return EvaluateForMatchingCards(3);
-        }
+        
     }
 }

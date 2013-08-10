@@ -114,6 +114,11 @@ namespace Katas.TexasHoldem
             return results;
         }
 
-        
+
+        public HandResult EvaluateForStraightFlush()
+        {
+            var isStraightFlush = EvaluateForStraight().IsResultFound && EvaluateForFlush().IsResultFound;
+            return new HandResult(isStraightFlush);
+        }
     }
 }

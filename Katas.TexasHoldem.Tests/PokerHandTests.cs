@@ -116,28 +116,28 @@ namespace Katas.TexasHoldem.Tests
         [Test]
         [TestCase("2s 2c 3s 4s 5s", true, 1)]
         [TestCase("2s 2c 3s 3s 5s", true, 2)]
-        public void EvaluateForPair_DetectsPairWith5Cards(string handString, bool isPairFound, int expectedPairsDiscovered)
+        public void EvaluateOfAKind_DetectsPairWith5Cards(string handString, bool isPairFound, int expectedGroupsDiscovered)
         {
             var hand = new PokerHand(handString);
 
             HandResult result = hand.EvaluateOfAKind(2);
 
             Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
-            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedGroupsDiscovered));
         }
 
         [Test]
         [TestCase("2s 2c 3s 4s 5s 6s 7s", true, 1)]
         [TestCase("2s 2c 3s 4s 5s 7s 7d", true, 2)]
         [TestCase("2s 2c 2h 4s 5s 7s 7d", true, 1, Description = "Three of a kind should not be detected as a pair.")]
-        public void EvaluateForPair_DetectsPairWith7Cards(string handString, bool isPairFound, int expectedPairsDiscovered)
+        public void EvaluateOfAKind_DetectsPairWith7Cards(string handString, bool isPairFound, int expectedGroupsDiscovered)
         {
             var hand = new PokerHand(handString);
 
             HandResult result = hand.EvaluateOfAKind(2);
 
             Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
-            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedGroupsDiscovered));
         }
 
         [Test]
@@ -145,28 +145,40 @@ namespace Katas.TexasHoldem.Tests
         [TestCase("2s 2c 2h 4s 5s", true, 1)]
         [TestCase("2s 2c 2h 4s 5s 6s 7s", true, 1)]
         [TestCase("2s 2c 2h 4s 4d 4h 7s", true, 2)]
-        public void EvaluateForPair_DetectsThreeOfAKind(string handString, bool isPairFound, int expectedPairsDiscovered)
+        public void EvaluateOfAKind_DetectsThreeOfAKind(string handString, bool isPairFound, int expectedGroupsDiscovered)
         {
             var hand = new PokerHand(handString);
 
             HandResult result = hand.EvaluateOfAKind(3);
 
             Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
-            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedGroupsDiscovered));
         }
 
         [Test]
         [TestCase("2s 2c 3h 3s 4s", false, 0)]
         [TestCase("2s 2c 2h 2d 5s", true, 1)]
         [TestCase("2s 2c 2h 2d 5s 6s 7s", true, 1)]
-        public void EvaluateForPair_DetectsFourOfAKind(string handString, bool isPairFound, int expectedPairsDiscovered)
+        public void EvaluateOfAKind_DetectsFourOfAKind(string handString, bool isPairFound, int expectedGroupsDiscovered)
         {
             var hand = new PokerHand(handString);
 
             HandResult result = hand.EvaluateOfAKind(4);
 
             Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
-            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedGroupsDiscovered));
+        }
+
+        [Test]
+        [TestCase("2s 2c 3h 3s 4s", false)]
+        [TestCase("2s 3s 4s 5s 6s", true)]
+        public void EvaluateForStraightFlush(string handString, bool isPairFound)
+        {
+            var hand = new PokerHand(handString);
+
+            HandResult result = hand.EvaluateForStraightFlush();
+
+            Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
         }
 
     }

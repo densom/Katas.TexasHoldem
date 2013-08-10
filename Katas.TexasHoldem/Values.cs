@@ -1,7 +1,11 @@
 ﻿namespace Katas.TexasHoldem
 {
-    public enum Values
+    public static class Values
     {
-        Ace = 14,
+        public static readonly int Ten = 10;
+        public static readonly int Jack = 11;
+        public static readonly int Queen = 12;
+        public static readonly int King = 13;
+        public static readonly int Ace = 14;
     }
 }

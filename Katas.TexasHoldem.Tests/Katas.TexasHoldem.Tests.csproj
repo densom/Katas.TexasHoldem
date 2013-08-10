@@ -45,7 +45,6 @@
     <Compile Include="CardTests.cs" />
     <Compile Include="PokerHandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Values.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Katas.TexasHoldem\Katas.TexasHoldem.csproj">

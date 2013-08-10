@@ -14,19 +14,19 @@ namespace Katas.TexasHoldem
         {
         }
 
-        internal IEnumerable<IGrouping<int, Card>> GetValueGroups(IReadOnlyList<Card> cards)
+        internal static IEnumerable<IGrouping<int, Card>> GetValueGroups(IReadOnlyList<Card> cards)
         {
             return cards.GroupBy(c => c.Value).OrderByDescending(x => x.Key);
         }
 
-        internal IEnumerable<IGrouping<Faces, Card>> GetFaceGroups()
+        internal static IEnumerable<IGrouping<Faces, Card>> GetFaceGroups(IReadOnlyList<Card> cards )
         {
-            return _cards.GroupBy(c => c.Face).OrderByDescending(x => x.Count());
+            return cards.GroupBy(c => c.Face).OrderByDescending(x => x.Count());
         }
 
         public HandResult EvaluateForFlush()
         {
-            var faceGroupsWithMoreThan5Cards = GetFaceGroups().Where(group=>group.Count() >= 5);
+            var faceGroupsWithMoreThan5Cards = GetFaceGroups(Cards).Where(group=>group.Count() >= 5);
             
             bool isFlushFound = faceGroupsWithMoreThan5Cards.Any();
             IEnumerable<PokerHand> listOfFlushHands = faceGroupsWithMoreThan5Cards.Select(x => new PokerHand(x.OrderByDescending(c=>c.Value).ToList()));

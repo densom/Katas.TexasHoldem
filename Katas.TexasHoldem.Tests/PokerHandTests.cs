@@ -36,7 +36,7 @@ namespace Katas.TexasHoldem.Tests
         public void GetValueGroups_GroupsNumbersInDescendingOrderByHighestValue(string handString, int groupNumber, int expectedKey, int expectedGroupCount)
         {
             var hand = new PokerHand(handString);
-            var groups = hand.GetValueGroups(hand.Cards).ToArray();
+            var groups = PokerHand.GetValueGroups(hand.Cards).ToArray();
 
             Assert.That(groups[groupNumber].Key, Is.EqualTo(expectedKey));
             Assert.That(groups.Count(), Is.EqualTo(expectedGroupCount));
@@ -48,7 +48,7 @@ namespace Katas.TexasHoldem.Tests
         public void GetFaceGroups_GroupsFaces(string handString, int groupNumber, Faces expectedKey, int expectedGroupCount)
         {
             var hand = new PokerHand(handString);
-            var groups = hand.GetFaceGroups().ToArray();
+            var groups = PokerHand.GetFaceGroups(hand.Cards).ToArray();
 
             Assert.That(groups[groupNumber].Key, Is.EqualTo(expectedKey));
             Assert.That(groups.Count(), Is.EqualTo(expectedGroupCount));

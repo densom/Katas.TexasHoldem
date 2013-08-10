@@ -15,5 +15,10 @@ namespace Katas.TexasHoldem
         }
 
         public IReadOnlyList<Card> Cards { get { return new List<Card>(_cards).AsReadOnly(); } }
+
+        public IEnumerable<IGrouping<int, Card>> GetNumberGroups()
+        {
+            return _cards.GroupBy(c => c.Value).Select(x=>x).OrderByDescending(x=>x.Key);
+        }
     }
 }

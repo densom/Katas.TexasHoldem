@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace Katas.TexasHoldem.Tests
 {
-    public class Class1
+    [TestFixture]
+    public class PokerHandTests
     {
+        
     }
 }

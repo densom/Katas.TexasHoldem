@@ -66,16 +66,16 @@ namespace Katas.TexasHoldem.Tests
         }
 
         [Test]
-        public void EvaluateForFlush_SevenCardHand_HighestValueFlushFirst()
+        [TestCase("2s 4s 6s 8s Ts Qs As", Values.Ace)]
+        [TestCase("Ts 4s 6s 8s 3s Qs 5s", Values.Queen)]
+        public void EvaluateForFlush_SevenCardHand_HighestValueFlushFirst(string handString, int expectedHighCard)
         {
-            var handString = "2s 4s 6s 8s Ts Qs As";
             var hand = new PokerHand(handString);
             var result = hand.EvaluateForFlush();
 
-            int firstCardOfFirstHand = result.ListOfFlushHands.First().Cards[0].Value;
+            var firstCardOfFirstHand = result.ListOfFlushHands.First().Cards[0].Value;
 
-            Assert.That(result.IsFlushFound, Is.EqualTo(true));
-            Assert.That(firstCardOfFirstHand, Is.EqualTo(Values.Ace));
+            Assert.That(firstCardOfFirstHand, Is.EqualTo(expectedHighCard));
         }
     }
 }

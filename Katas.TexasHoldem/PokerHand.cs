@@ -16,12 +16,12 @@ namespace Katas.TexasHoldem
 
         public IReadOnlyList<Card> Cards { get { return new List<Card>(_cards).AsReadOnly(); } }
 
-        public IEnumerable<IGrouping<int, Card>> GetValueGroups()
+        internal IEnumerable<IGrouping<int, Card>> GetValueGroups()
         {
             return _cards.GroupBy(c => c.Value).Select(x=>x).OrderByDescending(x=>x.Key);
         }
 
-        public IEnumerable<IGrouping<Faces, Card>> GetFaceGroups()
+        internal IEnumerable<IGrouping<Faces, Card>> GetFaceGroups()
         {
             return _cards.GroupBy(c => c.Face).Select(x => x).OrderByDescending(x => x.Count());
         }

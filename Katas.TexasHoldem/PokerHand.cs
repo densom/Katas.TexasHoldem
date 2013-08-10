@@ -6,7 +6,7 @@ namespace Katas.TexasHoldem
 {
     public class PokerHand
     {
-        private readonly ICollection<Card> _cards = new List<Card>(7);
+        private readonly List<Card> _cards = new List<Card>(7);
 
         public PokerHand(string handString)
         {
@@ -14,16 +14,31 @@ namespace Katas.TexasHoldem
             cardStrings.ToList().ForEach(cardString => _cards.Add(new Card(cardString)));
         }
 
+        public PokerHand(IEnumerable<Card> cards)
+        {
+            _cards.AddRange(cards);
+        }
+
         public IReadOnlyList<Card> Cards { get { return new List<Card>(_cards).AsReadOnly(); } }
 
         internal IEnumerable<IGrouping<int, Card>> GetValueGroups()
         {
-            return _cards.GroupBy(c => c.Value).Select(x=>x).OrderByDescending(x=>x.Key);
+            return _cards.GroupBy(c => c.Value).OrderByDescending(x=>x.Key);
         }
 
         internal IEnumerable<IGrouping<Faces, Card>> GetFaceGroups()
         {
-            return _cards.GroupBy(c => c.Face).Select(x => x).OrderByDescending(x => x.Count());
+            return _cards.GroupBy(c => c.Face).OrderByDescending(x => x.Count());
+        }
+
+        public FlushResult EvaluateForFlush()
+        {
+            var faceGroupsWithMoreThan5Cards = GetFaceGroups().Where(group=>group.Count() >= 5);
+            
+            bool isFlushFound = faceGroupsWithMoreThan5Cards.Any();
+            IEnumerable<PokerHand> listOfFlushHands = faceGroupsWithMoreThan5Cards.Select(x => new PokerHand(x.OrderByDescending(c=>c.Value).ToList()));
+
+            return new FlushResult(isFlushFound, listOfFlushHands);   
         }
     }
 }

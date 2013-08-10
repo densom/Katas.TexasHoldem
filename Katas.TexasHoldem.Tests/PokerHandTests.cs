@@ -54,6 +54,28 @@ namespace Katas.TexasHoldem.Tests
             Assert.That(groups.Count(), Is.EqualTo(expectedGroupCount));
         }
 
+        [Test]
+        [TestCase("2s 4s 6s 8s Ts", true)]
+        [TestCase("2s 4c 6d 8h Ts", false)]
+        public void EvaluateForFlush_DetectsFlushWith5Cards(string handString, bool isFlushFound)
+        {
+            var hand = new PokerHand(handString);
+            var result = hand.EvaluateForFlush();
 
+            Assert.That(result.IsFlushFound, Is.EqualTo(isFlushFound));
+        }
+
+        [Test]
+        public void EvaluateForFlush_SevenCardHand_HighestValueFlushFirst()
+        {
+            var handString = "2s 4s 6s 8s Ts Qs As";
+            var hand = new PokerHand(handString);
+            var result = hand.EvaluateForFlush();
+
+            int firstCardOfFirstHand = result.ListOfFlushHands.First().Cards[0].Value;
+
+            Assert.That(result.IsFlushFound, Is.EqualTo(true));
+            Assert.That(firstCardOfFirstHand, Is.EqualTo(Values.Ace));
+        }
     }
 }

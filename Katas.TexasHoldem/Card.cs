@@ -2,7 +2,7 @@
 
 namespace Katas.TexasHoldem
 {
-    public class Card
+    public class Card : IEquatable<Card>
     {
         public Card(string cardString)
         {
@@ -37,5 +37,10 @@ namespace Katas.TexasHoldem
 
         public int Value { get; private set; }
         public Faces Face { get; private set; }
+        
+        public bool Equals(Card other)
+        {
+            return Value == other.Value && Face == other.Face;
+        }
     }
 }

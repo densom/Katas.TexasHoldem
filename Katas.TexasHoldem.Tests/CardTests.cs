@@ -31,5 +31,14 @@ namespace Katas.TexasHoldem.Tests
 
             Assert.That(card.Value, Is.EqualTo(expectedValue));
         }
+
+        [Test]
+        public void EqualTo_Succes()
+        {
+            var card = new Card("4s");
+            var otherCard = new Card("4s");
+
+            Assert.That(card, Is.EqualTo(otherCard));
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace Katas.TexasHoldem
 
             for (int i = 0; i < numberOfSets; i++)
             {
-                fiveCardHandResult = EvaluateFiveCardHandForStraight(i);
+                fiveCardHandResult = EvaluateFiveCardsForStraight(GetSet(Cards, i + 1));
                 AppendResults(overallResults, fiveCardHandResult);
             }
 
@@ -74,16 +74,16 @@ namespace Katas.TexasHoldem
             }
         }
 
-        internal StraightResult EvaluateFiveCardHandForStraight(int setNumber)
+        internal StraightResult EvaluateFiveCardsForStraight(IReadOnlyList<Card> cards )
         {
             var result = new StraightResult();
+            var orderedCards = cards.OrderByDescending(c => c.Value).ToArray();
 
-            var cardSet = GetSet(Cards, setNumber + 1);
             bool breakInSequenceDetected = false;
 
             for (int i = 1; i < 5; i++)
             {
-                if (IsBreakInSequence(cardSet[i - 1], cardSet[i]))
+                if (IsBreakInSequence(orderedCards[i - 1], orderedCards[i]))
                 {
                     breakInSequenceDetected = true;
                     break;
@@ -94,7 +94,7 @@ namespace Katas.TexasHoldem
             
             if (!breakInSequenceDetected)
             {
-                result.AddDiscoveredHand(new PokerHand(cardSet));
+                result.AddDiscoveredHand(new PokerHand(orderedCards));
             }
 
             return result;

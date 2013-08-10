@@ -104,12 +104,12 @@ namespace Katas.TexasHoldem
 
             var pairValueGroups = GetValueGroups().Where(g => g.Count() == 2);
 
-            if (pairValueGroups.Any())
+            foreach (var pairValueGroup in pairValueGroups)
             {
                 results.IsResultFound = true;
-                results.AddDiscoveredHand(new CardSet(Cards));
+                results.AddDiscoveredHand(new CardSet(pairValueGroup.ToArray()));
             }
-
+            
             return results;
         }
     }

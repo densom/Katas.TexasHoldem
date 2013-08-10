@@ -114,14 +114,16 @@ namespace Katas.TexasHoldem.Tests
         }
 
         [Test]
-        public void EvaluateForPair_DetectsPairWith5Cards()
+        [TestCase("2s 2c 3s 4s 5s", true, 1)]
+        [TestCase("2s 2c 3s 3s 5s", true, 2)]
+        public void EvaluateForPair_DetectsPairWith5Cards(string handString, bool isPairFound, int expectedPairsDiscovered)
         {
-            var hand = new PokerHand("2s 2c 3s 4s 5s");
+            var hand = new PokerHand(handString);
 
             HandResult result = hand.EvaluateForPair();
 
-            Assert.That(result.IsResultFound, Is.EqualTo(true));
-            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(1));
+            Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
         }
     }
 }

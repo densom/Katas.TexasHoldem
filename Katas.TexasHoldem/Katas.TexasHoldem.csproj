@@ -43,8 +43,10 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Faces.cs" />
     <Compile Include="FlushResult.cs" />
+    <Compile Include="HandResultBase.cs" />
     <Compile Include="PokerHand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StraightResult.cs" />
     <Compile Include="Values.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

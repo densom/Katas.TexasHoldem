@@ -62,7 +62,7 @@ namespace Katas.TexasHoldem.Tests
             var hand = new PokerHand(handString);
             var result = hand.EvaluateForFlush();
 
-            Assert.That(result.IsFlushFound, Is.EqualTo(isFlushFound));
+            Assert.That(result.IsResultFound, Is.EqualTo(isFlushFound));
         }
 
         [Test]
@@ -73,9 +73,20 @@ namespace Katas.TexasHoldem.Tests
             var hand = new PokerHand(handString);
             var result = hand.EvaluateForFlush();
 
-            var firstCardOfFirstHand = result.ListOfFlushHands.First().Cards[0].Value;
+            var firstCardOfFirstHand = result.ListOfDiscoveredHands.First().Cards[0].Value;
 
             Assert.That(firstCardOfFirstHand, Is.EqualTo(expectedHighCard));
+        }
+
+        [Test]
+        [TestCase("2s 3s 4s 5s 6s", true)]
+        [TestCase("2s 4c 6d 8h Ts", false)]
+        public void EvaluateForFlush_DetectsStraightWith5Cards(string handString, bool isFlushFound)
+        {
+            var hand = new PokerHand(handString);
+            var result = hand.EvaluateForStraight();
+
+            Assert.That(result.IsResultFound, Is.EqualTo(isFlushFound));
         }
     }
 }

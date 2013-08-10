@@ -3,17 +3,10 @@ using System.Collections.ObjectModel;
 
 namespace Katas.TexasHoldem
 {
-    public class FlushResult
+    public class FlushResult : HandResultBase
     {
-        private List<PokerHand> _listOfFlushHands = new List<PokerHand>();
-
-        public bool IsFlushFound { get; private set; }
-        public IReadOnlyList<PokerHand> ListOfFlushHands { get { return _listOfFlushHands.AsReadOnly(); } }
-
-        public FlushResult(bool isFlushFound, IEnumerable<PokerHand> listOfFlushHands)
+        public FlushResult(bool isResultFound, IEnumerable<PokerHand> listOfDiscoveredHands = null) : base(isResultFound, listOfDiscoveredHands)
         {
-            IsFlushFound = isFlushFound;
-            _listOfFlushHands.AddRange(listOfFlushHands);
         }
     }
 }

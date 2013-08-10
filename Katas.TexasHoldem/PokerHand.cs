@@ -40,5 +40,21 @@ namespace Katas.TexasHoldem
 
             return new FlushResult(isFlushFound, listOfFlushHands);   
         }
+
+        public StraightResult EvaluateForStraight()
+        {
+            var fiveCardHand = Cards.OrderByDescending(card => card.Value).ToArray();
+
+            for (int i = 1; i < 5; i++)
+            {
+                if (fiveCardHand[i-1].Value - fiveCardHand[i].Value != 1)
+                {
+                    return new StraightResult(false);
+                }
+            }
+
+
+            return new StraightResult(true, new[] {new PokerHand(fiveCardHand), });
+        }
     }
 }

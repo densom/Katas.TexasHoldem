@@ -81,7 +81,18 @@ namespace Katas.TexasHoldem.Tests
         [Test]
         [TestCase("2s 3s 4s 5s 6s", true)]
         [TestCase("2s 4c 6d 8h Ts", false)]
-        public void EvaluateForFlush_DetectsStraightWith5Cards(string handString, bool isFlushFound)
+        public void EvaluateFiveCardHandForStraight_DetectsStraightWith5Cards(string handString, bool isFlushFound)
+        {
+            var hand = new PokerHand(handString);
+            var result = hand.EvaluateFiveCardHandForStraight(0);
+
+            Assert.That(result.IsResultFound, Is.EqualTo(isFlushFound));
+        }
+
+        [Test]
+        [TestCase("2s 3s 4s 5s 6s", true)]
+        [TestCase("2s 4c 6d 8h Ts", false)]
+        public void EvaluateForStraight_DetectsStraightWith5Cards(string handString, bool isFlushFound)
         {
             var hand = new PokerHand(handString);
             var result = hand.EvaluateForStraight();
@@ -93,7 +104,7 @@ namespace Katas.TexasHoldem.Tests
         [TestCase("2s 3s 4s 5s 6s 7s 8s", true, "8s", 3)]
         [TestCase("2s Ks 4s 5s 6s 7s 8s", true, "8s", 1)]
 //        [TestCase("2s 4c 6d 8h Ts", false)]
-        public void EvaluateForFlush_DetectsMultipleStraightWith7Cards(string handString, bool isFlushFound, string expectedHighCard, int expectedDiscoveredHandCount)
+        public void EvaluateForStraight_DetectsMultipleStraightWith7Cards(string handString, bool isFlushFound, string expectedHighCard, int expectedDiscoveredHandCount)
         {
             var hand = new PokerHand(handString);
             var result = hand.EvaluateForStraight();

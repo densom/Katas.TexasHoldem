@@ -44,39 +44,60 @@ namespace Katas.TexasHoldem
         public StraightResult EvaluateForStraight()
         {
             
-            //todo:  Test GREEN, but this next big time refactoring.
+            var overallResults = new StraightResult(false);
+            var fiveCardHandResult = new StraightResult(false);
 
-            var results = new StraightResult();
             var numberOfSets = NumberOfSets(Cards);
 
             for (int i = 0; i < numberOfSets; i++)
             {
-                var cardSet = GetSet(Cards, i + 1);
-                bool breakInSequenceDetected = false;
+                fiveCardHandResult = EvaluateFiveCardHandForStraight(i);
+                AppendResults(overallResults, fiveCardHandResult);
+            }
 
-                for (int j = 1; j < 5; j++)
+            return overallResults;
+        }
+
+        private static void AppendResults(StraightResult overallResults, StraightResult resultSet)
+        {
+            if (!overallResults.IsResultFound)
+            {
+                overallResults.IsResultFound = resultSet.IsResultFound;
+            }
+
+            if (resultSet.IsResultFound)
+            {
+                foreach (var discoveredHand in resultSet.ListOfDiscoveredHands)
                 {
-                    if (IsBreakInSequence(cardSet[j - 1], cardSet[j]))
-                    {
-                        breakInSequenceDetected = true;
-                        break;
-                    }
+                    overallResults.AddDiscoveredHand(discoveredHand);
                 }
+            }
+        }
 
-                // set IsResultsFound to false only if not already set.
-                if (!results.IsResultFound)
-                {
-                    results.IsResultFound = !breakInSequenceDetected;    
-                }
+        internal StraightResult EvaluateFiveCardHandForStraight(int setNumber)
+        {
+            var result = new StraightResult();
 
-                
-                if (!breakInSequenceDetected)
+            var cardSet = GetSet(Cards, setNumber + 1);
+            bool breakInSequenceDetected = false;
+
+            for (int i = 1; i < 5; i++)
+            {
+                if (IsBreakInSequence(cardSet[i - 1], cardSet[i]))
                 {
-                    results.AddDiscoveredHand(new PokerHand(cardSet));    
+                    breakInSequenceDetected = true;
+                    break;
                 }
             }
 
-            return results;
+            result.IsResultFound = !breakInSequenceDetected;
+            
+            if (!breakInSequenceDetected)
+            {
+                result.AddDiscoveredHand(new PokerHand(cardSet));
+            }
+
+            return result;
         }
 
         private bool IsBreakInSequence(Card highCard, Card lowCard)

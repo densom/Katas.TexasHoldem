@@ -6,11 +6,13 @@ namespace Katas.TexasHoldem
 {
     public class PokerHand : CardSet
     {
-        public PokerHand(string handString) : base(handString)
+        public PokerHand(string handString)
+            : base(handString)
         {
         }
 
-        public PokerHand(IEnumerable<Card> cards) : base(cards)
+        public PokerHand(IEnumerable<Card> cards)
+            : base(cards)
         {
         }
 
@@ -19,19 +21,19 @@ namespace Katas.TexasHoldem
             return cards.GroupBy(c => c.Value).OrderByDescending(x => x.Key);
         }
 
-        internal static IEnumerable<IGrouping<Faces, Card>> GetFaceGroups(IReadOnlyList<Card> cards )
+        internal static IEnumerable<IGrouping<Faces, Card>> GetFaceGroups(IReadOnlyList<Card> cards)
         {
             return cards.GroupBy(c => c.Face).OrderByDescending(x => x.Count());
         }
 
         public HandResult EvaluateForFlush()
         {
-            var faceGroupsWithMoreThan5Cards = GetFaceGroups(Cards).Where(group=>group.Count() >= 5);
-            
-            bool isFlushFound = faceGroupsWithMoreThan5Cards.Any();
-            IEnumerable<PokerHand> listOfFlushHands = faceGroupsWithMoreThan5Cards.Select(x => new PokerHand(x.OrderByDescending(c=>c.Value).ToList()));
+            var faceGroupsWithMoreThan5Cards = GetFaceGroups(Cards).Where(group => group.Count() >= 5);
 
-            return new HandResult(isFlushFound, listOfFlushHands);   
+            bool isFlushFound = faceGroupsWithMoreThan5Cards.Any();
+            IEnumerable<PokerHand> listOfFlushHands = faceGroupsWithMoreThan5Cards.Select(x => new PokerHand(x.OrderByDescending(c => c.Value).ToList()));
+
+            return new HandResult(isFlushFound, listOfFlushHands);
         }
 
         public HandResult EvaluateForStraight()
@@ -84,7 +86,7 @@ namespace Katas.TexasHoldem
             }
 
             result.IsResultFound = !breakInSequenceDetected;
-            
+
             if (!breakInSequenceDetected)
             {
                 result.AddDiscoveredHand(new PokerHand(orderedCards));
@@ -115,10 +117,61 @@ namespace Katas.TexasHoldem
         }
 
 
+        private HandResult EvaluateFiveCardsForStraightFlush(IEnumerable<Card> cards )
+        {
+            if (EvaluateForStraight().IsResultFound && EvaluateForFlush().IsResultFound)
+            {
+                var result = new HandResult(true);
+                result.AddDiscoveredHand(new CardSet(cards));
+                return result;
+            }
+
+            return new HandResult(false);
+        }
+
         public HandResult EvaluateForStraightFlush()
         {
-            var isStraightFlush = EvaluateForStraight().IsResultFound && EvaluateForFlush().IsResultFound;
-            return new HandResult(isStraightFlush);
+            var overallResult = new HandResult(false);
+            
+            overallResult.IsResultFound = EvaluateForStraight().IsResultFound && EvaluateForFlush().IsResultFound;
+            
+            var setCount = NumberOfSets(Cards);
+
+            for (int i = 0; i < setCount; i++)
+            {
+                var set = GetSet(Cards, i);
+                var result = EvaluateFiveCardsForStraightFlush(set);
+                if (result.IsResultFound)
+                {
+                    result.ListOfDiscoveredHands.ToList().ForEach(overallResult.AddDiscoveredHand);
+                }
+
+            }
+            
+            return overallResult;
+        }
+
+        public HandResult EvaluateForRoyalFlush()
+        {
+            var straightFlushResult = EvaluateForStraightFlush();
+
+            if (straightFlushResult.IsResultFound)
+            {
+                foreach (var hand in straightFlushResult.ListOfDiscoveredHands)
+                {
+                    if (IsHandHasAnAce(hand))
+                    {
+                        return new HandResult(true, new[] {new PokerHand(hand.Cards), });
+                    }
+                }
+            }
+
+            return new HandResult(false);
+        }
+
+        private static bool IsHandHasAnAce(CardSet hand)
+        {
+            return hand.Cards.Any(card => card.Value == Values.Ace);
         }
     }
 }

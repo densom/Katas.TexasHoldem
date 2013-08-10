@@ -170,16 +170,35 @@ namespace Katas.TexasHoldem.Tests
         }
 
         [Test]
-        [TestCase("2s 2c 3h 3s 4s", false)]
-        [TestCase("2s 3s 4s 5s 6s", true)]
-        public void EvaluateForStraightFlush(string handString, bool isPairFound)
+        [TestCase("2s 2c 3h 3s 4s", false, 0, Description = "Junk")]
+        [TestCase("2s 3s 4s 5s 6s", true, 1, Description = "5 Card Straight Flush")]
+        [TestCase("2s 3s 4s 5s 6s 7s 8s", true, 3, Description = "7 Card Straight Flush")]
+        public void EvaluateForStraightFlush(string handString, bool isPairFound, int expectedDiscoveredHandCount)
         {
             var hand = new PokerHand(handString);
 
             HandResult result = hand.EvaluateForStraightFlush();
 
             Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedDiscoveredHandCount));
         }
+
+        [Test]
+        [TestCase("2s 2c 3h 3s 4s", false, 0, Description = "Junk")]
+        [TestCase("2s 3s 4s 5s 6s", false, 0, Description = "Only straight flush")]
+        [TestCase("Ts Js Qs Ks As", true, 1, Description = "Royal Flush")]
+        [TestCase("2h Ts Js Qs Ks As 8s", true, 1, Description = "7 Card Containing Royal Flush")]
+        public void EvaluateForRoyalFlush(string handString, bool isPairFound, int expectedDiscoveredHandCount)
+        {
+            var hand = new PokerHand(handString);
+
+            HandResult result = hand.EvaluateForRoyalFlush();
+
+            Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedDiscoveredHandCount));
+        }
+
+        
 
     }
 }

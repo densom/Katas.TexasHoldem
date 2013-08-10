@@ -14,9 +14,9 @@ namespace Katas.TexasHoldem
         {
         }
 
-        internal IEnumerable<IGrouping<int, Card>> GetValueGroups()
+        internal IEnumerable<IGrouping<int, Card>> GetValueGroups(IReadOnlyList<Card> cards)
         {
-            return _cards.GroupBy(c => c.Value).OrderByDescending(x=>x.Key);
+            return cards.GroupBy(c => c.Value).OrderByDescending(x => x.Key);
         }
 
         internal IEnumerable<IGrouping<Faces, Card>> GetFaceGroups()
@@ -102,7 +102,7 @@ namespace Katas.TexasHoldem
         {
             var results = new HandResult();
 
-            var pairValueGroups = GetValueGroups().Where(g => g.Count() == 2);
+            var pairValueGroups = GetValueGroups(Cards).Where(g => g.Count() == 2);
 
             foreach (var pairValueGroup in pairValueGroups)
             {

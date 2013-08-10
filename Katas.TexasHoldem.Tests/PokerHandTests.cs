@@ -88,5 +88,19 @@ namespace Katas.TexasHoldem.Tests
 
             Assert.That(result.IsResultFound, Is.EqualTo(isFlushFound));
         }
+
+        [Test]
+        [TestCase("2s 3s 4s 5s 6s 7s 8s", true, "8s", 3)]
+        [TestCase("2s Ks 4s 5s 6s 7s 8s", true, "8s", 1)]
+//        [TestCase("2s 4c 6d 8h Ts", false)]
+        public void EvaluateForFlush_DetectsMultipleStraightWith7Cards(string handString, bool isFlushFound, string expectedHighCard, int expectedDiscoveredHandCount)
+        {
+            var hand = new PokerHand(handString);
+            var result = hand.EvaluateForStraight();
+
+            Assert.That(result.IsResultFound, Is.EqualTo(isFlushFound));
+            Assert.That(result.ListOfDiscoveredHands[0].Cards.First().Equals(new Card(expectedHighCard)));
+            Assert.That(result.ListOfDiscoveredHands.Count, Is.EqualTo(expectedDiscoveredHandCount));
+        }
     }
 }

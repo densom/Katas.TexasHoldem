@@ -43,18 +43,55 @@ namespace Katas.TexasHoldem
 
         public StraightResult EvaluateForStraight()
         {
-            var fiveCardHand = Cards.OrderByDescending(card => card.Value).ToArray();
+            
+            //todo:  Test GREEN, but this next big time refactoring.
 
-            for (int i = 1; i < 5; i++)
+            var results = new StraightResult();
+            var numberOfSets = NumberOfSets(Cards);
+
+            for (int i = 0; i < numberOfSets; i++)
             {
-                if (fiveCardHand[i-1].Value - fiveCardHand[i].Value != 1)
+                var cardSet = GetSet(Cards, i + 1);
+                bool breakInSequenceDetected = false;
+
+                for (int j = 1; j < 5; j++)
                 {
-                    return new StraightResult(false);
+                    if (IsBreakInSequence(cardSet[j - 1], cardSet[j]))
+                    {
+                        breakInSequenceDetected = true;
+                        break;
+                    }
+                }
+
+                // set IsResultsFound to false only if not already set.
+                if (!results.IsResultFound)
+                {
+                    results.IsResultFound = !breakInSequenceDetected;    
+                }
+
+                
+                if (!breakInSequenceDetected)
+                {
+                    results.AddDiscoveredHand(new PokerHand(cardSet));    
                 }
             }
 
+            return results;
+        }
 
-            return new StraightResult(true, new[] {new PokerHand(fiveCardHand), });
+        private bool IsBreakInSequence(Card highCard, Card lowCard)
+        {
+            return highCard.Value - lowCard.Value != 1;
+        }
+
+        private IReadOnlyList<Card> GetSet(IEnumerable<Card> cards, int setNumber)
+        {
+            return cards.OrderByDescending(card => card.Value).Skip(setNumber - 1).Take(5).ToList().AsReadOnly();
+        }
+
+        private int NumberOfSets(IEnumerable<Card> cards)
+        {
+            return cards.Count() - 5 + 1;
         }
     }
 }

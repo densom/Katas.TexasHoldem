@@ -100,17 +100,27 @@ namespace Katas.TexasHoldem
 
         public HandResult EvaluateForPair()
         {
+            return EvaluateForMatchingCards(2);
+        }
+
+        private HandResult EvaluateForMatchingCards(int numberOfCardsToMatch)
+        {
             var results = new HandResult();
 
-            var pairValueGroups = GetValueGroups(Cards).Where(g => g.Count() == 2);
+            var pairValueGroups = GetValueGroups(Cards).Where(g => g.Count() == numberOfCardsToMatch);
 
             foreach (var pairValueGroup in pairValueGroups)
             {
                 results.IsResultFound = true;
                 results.AddDiscoveredHand(new CardSet(pairValueGroup.ToArray()));
             }
-            
+
             return results;
+        }
+
+        public HandResult EvaluateForThreeOfAKind()
+        {
+            return EvaluateForMatchingCards(3);
         }
     }
 }

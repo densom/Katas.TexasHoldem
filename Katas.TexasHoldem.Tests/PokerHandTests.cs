@@ -140,6 +140,19 @@ namespace Katas.TexasHoldem.Tests
             Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
         }
 
+        [Test]
+        [TestCase("2s 2c 3h 3s 4s", false, 0)]
+        [TestCase("2s 2c 2h 4s 5s", true, 1)]
+        [TestCase("2s 2c 2h 4s 5s 6s 7s", true, 1)]
+        [TestCase("2s 2c 2h 4s 4d 4h 7s", true, 2)]
+        public void EvaluateForPair_DetectsThreeOfAKind(string handString, bool isPairFound, int expectedPairsDiscovered)
+        {
+            var hand = new PokerHand(handString);
 
+            HandResult result = hand.EvaluateForThreeOfAKind();
+
+            Assert.That(result.IsResultFound, Is.EqualTo(isPairFound));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(expectedPairsDiscovered));
+        }
     }
 }

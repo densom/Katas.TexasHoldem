@@ -112,5 +112,16 @@ namespace Katas.TexasHoldem.Tests
             Assert.That(result.ListOfDiscoveredHands[0].Cards.First().Equals(new Card(expectedHighCard)));
             Assert.That(result.ListOfDiscoveredHands.Count, Is.EqualTo(expectedDiscoveredHandCount));
         }
+
+        [Test]
+        public void EvaluateForPair_DetectsPairWith5Cards()
+        {
+            var hand = new PokerHand("2s 2c 3s 4s 5s");
+
+            HandResult result = hand.EvaluateForPair();
+
+            Assert.That(result.IsResultFound, Is.EqualTo(true));
+            Assert.That(result.ListOfDiscoveredHands.Count(), Is.EqualTo(1));
+        }
     }
 }

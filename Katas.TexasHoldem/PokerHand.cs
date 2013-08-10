@@ -4,22 +4,15 @@ using System.Linq;
 
 namespace Katas.TexasHoldem
 {
-    public class PokerHand
+    public class PokerHand : CardSet
     {
-        private readonly List<Card> _cards = new List<Card>(7);
-
-        public PokerHand(string handString)
+        public PokerHand(string handString) : base(handString)
         {
-            var cardStrings = handString.Split(' ');
-            cardStrings.ToList().ForEach(cardString => _cards.Add(new Card(cardString)));
         }
 
-        public PokerHand(IEnumerable<Card> cards)
+        public PokerHand(IEnumerable<Card> cards) : base(cards)
         {
-            _cards.AddRange(cards);
         }
-
-        public IReadOnlyList<Card> Cards { get { return new List<Card>(_cards).AsReadOnly(); } }
 
         internal IEnumerable<IGrouping<int, Card>> GetValueGroups()
         {
@@ -31,21 +24,21 @@ namespace Katas.TexasHoldem
             return _cards.GroupBy(c => c.Face).OrderByDescending(x => x.Count());
         }
 
-        public FlushResult EvaluateForFlush()
+        public HandResult EvaluateForFlush()
         {
             var faceGroupsWithMoreThan5Cards = GetFaceGroups().Where(group=>group.Count() >= 5);
             
             bool isFlushFound = faceGroupsWithMoreThan5Cards.Any();
             IEnumerable<PokerHand> listOfFlushHands = faceGroupsWithMoreThan5Cards.Select(x => new PokerHand(x.OrderByDescending(c=>c.Value).ToList()));
 
-            return new FlushResult(isFlushFound, listOfFlushHands);   
+            return new HandResult(isFlushFound, listOfFlushHands);   
         }
 
-        public StraightResult EvaluateForStraight()
+        public HandResult EvaluateForStraight()
         {
-            
-            var overallResults = new StraightResult(false);
-            var fiveCardHandResult = new StraightResult(false);
+
+            var overallResults = new HandResult(false);
+            var fiveCardHandResult = new HandResult(false);
 
             var numberOfSets = NumberOfSets(Cards);
 
@@ -58,7 +51,7 @@ namespace Katas.TexasHoldem
             return overallResults;
         }
 
-        private static void AppendResults(StraightResult overallResults, StraightResult resultSet)
+        private static void AppendResults(HandResult overallResults, HandResult resultSet)
         {
             if (!overallResults.IsResultFound)
             {
@@ -74,9 +67,9 @@ namespace Katas.TexasHoldem
             }
         }
 
-        internal StraightResult EvaluateFiveCardsForStraight(IReadOnlyList<Card> cards )
+        internal HandResult EvaluateFiveCardsForStraight(IReadOnlyList<Card> cards)
         {
-            var result = new StraightResult();
+            var result = new HandResult();
             var orderedCards = cards.OrderByDescending(c => c.Value).ToArray();
 
             bool breakInSequenceDetected = false;
@@ -105,14 +98,19 @@ namespace Katas.TexasHoldem
             return highCard.Value - lowCard.Value != 1;
         }
 
-        private IReadOnlyList<Card> GetSet(IEnumerable<Card> cards, int setNumber)
+        public HandResult EvaluateForPair()
         {
-            return cards.OrderByDescending(card => card.Value).Skip(setNumber - 1).Take(5).ToList().AsReadOnly();
-        }
+            var results = new HandResult();
 
-        private int NumberOfSets(IEnumerable<Card> cards)
-        {
-            return cards.Count() - 5 + 1;
+            var pairValueGroups = GetValueGroups().Where(g => g.Count() == 2);
+
+            if (pairValueGroups.Any())
+            {
+                results.IsResultFound = true;
+                results.AddDiscoveredHand(new CardSet(Cards));
+            }
+
+            return results;
         }
     }
 }

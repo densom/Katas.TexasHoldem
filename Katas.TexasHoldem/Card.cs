@@ -42,5 +42,10 @@ namespace Katas.TexasHoldem
         {
             return Value == other.Value && Face == other.Face;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}{1}", Value, Face);
+        }
     }
 }

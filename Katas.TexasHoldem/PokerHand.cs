@@ -20,5 +20,10 @@ namespace Katas.TexasHoldem
         {
             return _cards.GroupBy(c => c.Value).Select(x=>x).OrderByDescending(x=>x.Key);
         }
+
+        public IEnumerable<IGrouping<Faces, Card>> GetFaceGroups()
+        {
+            return _cards.GroupBy(c => c.Face).Select(x => x).OrderByDescending(x => x.Count());
+        }
     }
 }

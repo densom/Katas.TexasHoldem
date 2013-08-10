@@ -43,12 +43,12 @@ namespace Katas.TexasHoldem.Tests
         }
 
         [Test]
-        [TestCase("4s 4d", 0, 4, 1)]
-        [TestCase("3s 4s 4d", 1, 3, 2)]
-        public void DetectNumberGroups_GroupsNumbersInDescendingOrderByHighestValue(string handString, int groupNumber, int expectedKey, int expectedGroupCount)
+        [TestCase("4s 4d", 0, Faces.Spade, 2)]
+        [TestCase("3s 4s 4d", 0, Faces.Spade, 2)]
+        public void GetFaceGroups_GroupsFaces(string handString, int groupNumber, Faces expectedKey, int expectedGroupCount)
         {
             var hand = new PokerHand(handString);
-            var groups = hand.GetNumberGroups().ToArray();
+            var groups = hand.GetFaceGroups().ToArray();
 
             Assert.That(groups[groupNumber].Key, Is.EqualTo(expectedKey));
             Assert.That(groups.Count(), Is.EqualTo(expectedGroupCount));

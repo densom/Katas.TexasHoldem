@@ -10,6 +10,14 @@ namespace Katas.TexasHoldem
             Face = (Faces) cardString[1];
         }
 
+        public int Value { get; private set; }
+        public Faces Face { get; private set; }
+        
+        public bool Equals(Card other)
+        {
+            return Value == other.Value && Face == other.Face;
+        }
+
         private static int ParseValue(char cardString)
         {
             if (char.IsDigit(cardString))
@@ -33,14 +41,6 @@ namespace Katas.TexasHoldem
                     return 0;
             }
             
-        }
-
-        public int Value { get; private set; }
-        public Faces Face { get; private set; }
-        
-        public bool Equals(Card other)
-        {
-            return Value == other.Value && Face == other.Face;
         }
 
         public override string ToString()

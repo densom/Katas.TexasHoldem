@@ -16,6 +16,11 @@ namespace Katas.TexasHoldem
         {
         }
 
+        public int CompareTo(PokerHand other)
+        {
+            return Score().CompareTo(other.Score());
+        }
+
         internal static IEnumerable<IGrouping<int, Card>> GetValueGroups(IReadOnlyList<Card> cards)
         {
             return cards.GroupBy(c => c.Value).OrderByDescending(x => x.Key);
@@ -172,11 +177,6 @@ namespace Katas.TexasHoldem
         private static bool IsHandHasAnAce(CardSet hand)
         {
             return hand.Cards.Any(card => card.Value == Values.Ace);
-        }
-
-        public int CompareTo(PokerHand other)
-        {
-            return Score().CompareTo(other.Score());
         }
 
         private int Score()

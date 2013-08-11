@@ -20,13 +20,13 @@ namespace Katas.TexasHoldem
             }
         }
 
+        public bool IsResultFound { get; internal set; }
+        public IReadOnlyList<CardSet> ListOfDiscoveredHands { get { return _listOfDiscoveredCardSets.AsReadOnly(); } }
+
         internal void AddDiscoveredHand(CardSet hand)
         {
             _listOfDiscoveredCardSets.Add(hand);
         }
-        
-        public bool IsResultFound { get; internal set; }
-        public IReadOnlyList<CardSet> ListOfDiscoveredHands { get { return _listOfDiscoveredCardSets.AsReadOnly(); } }
 
         protected virtual int BaseScore()
         {

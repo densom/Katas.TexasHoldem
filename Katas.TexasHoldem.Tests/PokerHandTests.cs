@@ -9,6 +9,10 @@ namespace Katas.TexasHoldem.Tests
     [TestFixture]
     public class PokerHandTests
     {
+        private const string RoyalFlush5Card = "Ts Js Qs Ks As";
+        private const string JunkHand = "2s 4h 6c 8d 9s";
+
+
         [Test]
         public void CreateHand_SingleCard()
         {
@@ -186,7 +190,7 @@ namespace Katas.TexasHoldem.Tests
         [Test]
         [TestCase("2s 2c 3h 3s 4s", false, 0, Description = "Junk")]
         [TestCase("2s 3s 4s 5s 6s", false, 0, Description = "Only straight flush")]
-        [TestCase("Ts Js Qs Ks As", true, 1, Description = "Royal Flush")]
+        [TestCase(RoyalFlush5Card, true, 1, Description = "Royal Flush")]
         [TestCase("2h Ts Js Qs Ks As 8s", true, 1, Description = "7 Card Containing Royal Flush")]
         public void EvaluateForRoyalFlush(string handString, bool isPairFound, int expectedDiscoveredHandCount)
         {
@@ -204,7 +208,36 @@ namespace Katas.TexasHoldem.Tests
         //todo: Two pair
 
         //todo: Compare hands.
-        
+        [Test]
+        public void Evaluate_DetectsCorrectHand()
+        {
+            var royalFlush = new PokerHand(RoyalFlush5Card);
+
+            var handResult = royalFlush.Evaluate();
+
+            Assert.That(handResult, Is.InstanceOf<RoyalFlushHandResult>());
+
+        }
+
+        [Test]
+        public void CompareHands_RoyalFlushBeatsJunkHand()
+        {
+            var royalFlush = new PokerHand(RoyalFlush5Card);
+            var junkHand = new PokerHand(JunkHand);
+
+            Assert.That(royalFlush, Is.GreaterThan(junkHand));
+        }
+
+        [Test]
+        [Ignore("not ready to implement yet.  starting with royal flush.")]
+        public void CompareHands_ThreeOfAKindBeatsPair()
+        {
+            var pairHand = new PokerHand("9s 8d 7h 5s 5d");
+            var threeOfAKindHand = new PokerHand("3s 3d 3h 5s 7s");
+
+
+            Assert.That(threeOfAKindHand, Is.GreaterThan(pairHand));
+        }
 
     }
 }

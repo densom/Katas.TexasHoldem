@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Katas.TexasHoldem
 {
-    public class PokerHand : CardSet
+    public class PokerHand : CardSet, IComparable<PokerHand>
     {
         public PokerHand(string handString)
             : base(handString)
@@ -161,7 +161,7 @@ namespace Katas.TexasHoldem
                 {
                     if (IsHandHasAnAce(hand))
                     {
-                        return new HandResult(true, new[] {new PokerHand(hand.Cards), });
+                        return new RoyalFlushHandResult(true, new[] {new PokerHand(hand.Cards), });
                     }
                 }
             }
@@ -172,6 +172,21 @@ namespace Katas.TexasHoldem
         private static bool IsHandHasAnAce(CardSet hand)
         {
             return hand.Cards.Any(card => card.Value == Values.Ace);
+        }
+
+        public int CompareTo(PokerHand other)
+        {
+            return Score().CompareTo(other.Score());
+        }
+
+        private int Score()
+        {
+            return Evaluate().Score();
+        }
+
+        public HandResult Evaluate()
+        {
+            return EvaluateForRoyalFlush();
         }
     }
 }

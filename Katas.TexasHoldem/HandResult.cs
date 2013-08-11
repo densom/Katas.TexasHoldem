@@ -27,5 +27,22 @@ namespace Katas.TexasHoldem
         
         public bool IsResultFound { get; internal set; }
         public IReadOnlyList<CardSet> ListOfDiscoveredHands { get { return _listOfDiscoveredCardSets.AsReadOnly(); } }
+
+        protected virtual int BaseScore()
+        {
+            return 0;
+        }
+
+        protected virtual int KickerScore()
+        {
+            return 0;
+        }
+
+        public int Score()
+        {
+            return BaseScore() + KickerScore();
+        }
+
+
     }
 }

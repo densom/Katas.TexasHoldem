@@ -108,7 +108,24 @@ namespace Katas.TexasHoldem
 
         public HandResult EvaluateOfAKind(int numberOfCardsToMatch)
         {
-            var results = new HandResult();
+            HandResult results;
+
+            switch (numberOfCardsToMatch)
+            {
+                case 4:
+                    results = new FourOfAKindHandResult();
+                    break;
+                case 3:
+                    results = new ThreeOfAKindHandResult();
+                    break;
+                case 2:
+                    results = new PairHandResult();
+                    break;
+                default:
+                    results = new HandResult();
+                    break;
+            }
+
 
             var pairValueGroups = GetValueGroups(Cards).Where(g => g.Count() == numberOfCardsToMatch);
 
@@ -181,12 +198,38 @@ namespace Katas.TexasHoldem
 
         private int Score()
         {
-            return Evaluate().Score();
+            return Evaluate().HandRank();
+
+            //todo:  Calculate kicker if they are the same hand.
         }
 
         public HandResult Evaluate()
         {
-            return EvaluateForRoyalFlush();
+            var royalFlushResult = EvaluateForRoyalFlush();
+
+            if (royalFlushResult.IsResultFound)
+                return royalFlushResult;
+
+            var straightFlushResult = EvaluateForStraightFlush();
+
+            if (straightFlushResult.IsResultFound)
+                return straightFlushResult;
+
+            //todo:  insert remaining hands here.
+
+            var threeOfAKindResult = EvaluateOfAKind(3);
+
+            if (threeOfAKindResult.IsResultFound)
+                return threeOfAKindResult;
+
+            var pairResult = EvaluateOfAKind(2);
+
+            if (pairResult.IsResultFound)
+                return pairResult;
+
+
+
+            return new HandResult();
         }
     }
 }

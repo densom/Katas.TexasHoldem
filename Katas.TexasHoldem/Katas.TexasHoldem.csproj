@@ -42,10 +42,13 @@
     <Compile Include="Card.cs" />
     <Compile Include="CardSet.cs" />
     <Compile Include="Faces.cs" />
+    <Compile Include="FourOfAKindHandResult.cs" />
     <Compile Include="HandResult.cs" />
+    <Compile Include="PairHandResult.cs" />
     <Compile Include="PokerHand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoyalFlushHandResult.cs" />
+    <Compile Include="ThreeOfAKindHandResult.cs" />
     <Compile Include="Values.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

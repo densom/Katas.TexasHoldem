@@ -10,6 +10,7 @@ namespace Katas.TexasHoldem.Tests
     public class PokerHandTests
     {
         private const string RoyalFlush5Card = "Ts Js Qs Ks As";
+        private const string PairHand5Card = "3s 3d 5h 7h 8h";
         private const string JunkHand = "2s 4h 6c 8d 9s";
 
 
@@ -229,7 +230,15 @@ namespace Katas.TexasHoldem.Tests
         }
 
         [Test]
-        [Ignore("not ready to implement yet.  starting with royal flush.")]
+        public void CompareHands_PairBeatsHighCard()
+        {
+            var pairHand = new PokerHand(PairHand5Card);
+            var junkHand = new PokerHand(JunkHand);
+
+            Assert.That(pairHand, Is.GreaterThan(junkHand));
+        }
+
+        [Test]
         public void CompareHands_ThreeOfAKindBeatsPair()
         {
             var pairHand = new PokerHand("9s 8d 7h 5s 5d");

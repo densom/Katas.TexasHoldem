@@ -8,7 +8,7 @@ namespace Katas.TexasHoldem
         {
         }
 
-        protected override int BaseScore()
+        public override int HandRank()
         {
             return 1000;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Katas.TexasHoldem
 {
@@ -28,21 +29,18 @@ namespace Katas.TexasHoldem
             _listOfDiscoveredCardSets.Add(hand);
         }
 
-        protected virtual int BaseScore()
+
+        public virtual int HandRank()
         {
             return 0;
         }
 
-        protected virtual int KickerScore()
+        protected virtual int CompareHandOfSameRank(HandResult otherHand)
         {
-            return 0;
+            throw new NotImplementedException();
         }
-
-        public int Score()
-        {
-            return BaseScore() + KickerScore();
-        }
-
 
     }
+
+
 }

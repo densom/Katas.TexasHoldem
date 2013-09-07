@@ -16,10 +16,16 @@ namespace Katas.TexasHoldem
         {
         }
 
+        public HandResult HandResult { get { return Evaluate(); }}
+
+        #region IComparable<PokerHand> Members
+
         public int CompareTo(PokerHand other)
         {
             return Score().CompareTo(other.Score());
         }
+
+        #endregion
 
         internal static IEnumerable<IGrouping<int, Card>> GetValueGroups(IReadOnlyList<Card> cards)
         {
@@ -31,7 +37,7 @@ namespace Katas.TexasHoldem
             return cards.GroupBy(c => c.Face).OrderByDescending(x => x.Count());
         }
 
-        public HandResult EvaluateForFlush()
+        internal HandResult EvaluateForFlush()
         {
             var faceGroupsWithMoreThan5Cards = GetFaceGroups(Cards).Where(group => group.Count() >= 5);
 
@@ -41,7 +47,7 @@ namespace Katas.TexasHoldem
             return new HandResult(isFlushFound, listOfFlushHands);
         }
 
-        public HandResult EvaluateForStraight()
+        internal HandResult EvaluateForStraight()
         {
 
             var overallResults = new HandResult(false);
@@ -106,7 +112,7 @@ namespace Katas.TexasHoldem
         }
 
 
-        public HandResult EvaluateOfAKind(int numberOfCardsToMatch)
+        internal HandResult EvaluateOfAKind(int numberOfCardsToMatch)
         {
             HandResult results;
 
@@ -160,7 +166,7 @@ namespace Katas.TexasHoldem
             return new HandResult(false);
         }
 
-        public HandResult EvaluateForStraightFlush()
+        internal HandResult EvaluateForStraightFlush()
         {
             var overallResult = new HandResult(false);
             
@@ -182,7 +188,7 @@ namespace Katas.TexasHoldem
             return overallResult;
         }
 
-        public HandResult EvaluateForRoyalFlush()
+        internal HandResult EvaluateForRoyalFlush()
         {
             var straightFlushResult = EvaluateForStraightFlush();
 
@@ -212,7 +218,7 @@ namespace Katas.TexasHoldem
             //todo:  Calculate kicker if they are the same hand.
         }
 
-        public HandResult Evaluate()
+        private HandResult Evaluate()
         {
             var evaluationMethods = HandRankingEvaluationMethods();
 

@@ -212,9 +212,7 @@ namespace Katas.TexasHoldem.Tests
         [Test]
         public void Evaluate_DetectsCorrectHand()
         {
-            var royalFlush = new PokerHand(RoyalFlush5Card);
-
-            var handResult = royalFlush.Evaluate();
+            var handResult = new PokerHand(RoyalFlush5Card).HandResult;
 
             Assert.That(handResult, Is.InstanceOf<RoyalFlushHandResult>());
 

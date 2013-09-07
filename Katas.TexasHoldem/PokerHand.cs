@@ -144,17 +144,17 @@ namespace Katas.TexasHoldem
             return results;
         }
 
-        private HandResult EvaluateThreeOfAKind()
+        internal HandResult EvaluateThreeOfAKind()
         {
             return EvaluateOfAKind(3);
         }
 
-        private HandResult EvaluatePair()
+        internal HandResult EvaluatePair()
         {
             return EvaluateOfAKind(2);
         }
 
-        private HandResult EvaluateFiveCardsForStraightFlush(IEnumerable<Card> cards )
+        internal HandResult EvaluateFiveCardsForStraightFlush(IEnumerable<Card> cards)
         {
             if (EvaluateForStraight().IsResultFound && EvaluateForFlush().IsResultFound)
             {
@@ -206,7 +206,7 @@ namespace Katas.TexasHoldem
             return new HandResult(false);
         }
 
-        private static bool IsHandHasAnAce(CardSet hand)
+        internal static bool IsHandHasAnAce(CardSet hand)
         {
             return hand.Cards.Any(card => card.Value == Values.Ace);
         }

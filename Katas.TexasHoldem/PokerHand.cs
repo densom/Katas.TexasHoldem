@@ -138,6 +138,15 @@ namespace Katas.TexasHoldem
             return results;
         }
 
+        private HandResult EvaluateThreeOfAKind()
+        {
+            return EvaluateOfAKind(3);
+        }
+
+        private HandResult EvaluatePair()
+        {
+            return EvaluateOfAKind(2);
+        }
 
         private HandResult EvaluateFiveCardsForStraightFlush(IEnumerable<Card> cards )
         {
@@ -205,31 +214,33 @@ namespace Katas.TexasHoldem
 
         public HandResult Evaluate()
         {
-            var royalFlushResult = EvaluateForRoyalFlush();
+            var evaluationMethods = HandRankingEvaluationMethods();
 
-            if (royalFlushResult.IsResultFound)
-                return royalFlushResult;
+            foreach (var method in evaluationMethods)
+            {
+                var result = method.Invoke();
 
-            var straightFlushResult = EvaluateForStraightFlush();
-
-            if (straightFlushResult.IsResultFound)
-                return straightFlushResult;
-
-            //todo:  insert remaining hands here.
-
-            var threeOfAKindResult = EvaluateOfAKind(3);
-
-            if (threeOfAKindResult.IsResultFound)
-                return threeOfAKindResult;
-
-            var pairResult = EvaluateOfAKind(2);
-
-            if (pairResult.IsResultFound)
-                return pairResult;
-
-
-
+                if (result.IsResultFound)
+                {
+                    return result;
+                }
+            }
+            
             return new HandResult();
+        }
+
+        private IEnumerable<Func<HandResult>> HandRankingEvaluationMethods()
+        {
+            var handFunctions = new List<Func<HandResult>>
+                {
+                    EvaluateForRoyalFlush,
+                    EvaluateForStraightFlush,
+                    //todo:  insert remaining hands here.
+                    EvaluateThreeOfAKind,
+                    EvaluatePair
+                };
+            
+            return handFunctions;
         }
     }
 }
